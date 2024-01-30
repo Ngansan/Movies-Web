@@ -25,8 +25,9 @@ const Navigation = styled.div`
     height: 80px;
     position: fixed;
     top: 0;
-    // transition-timing-function: ease-in;
-    // transition: all 1s;
+    z-index: 10;
+    transition-timing-function: ease-in;
+    transition: all 1s;
 
     @media only screen and (max-width: 600px){
         height: 100px;
@@ -79,7 +80,7 @@ const Navigation = styled.div`
                 border-radius: 4px;
                 opacity: 0;
                 background: var(--color-background);
-                // transition: width 0.5s;
+                transition: width 0.5s;
 
                 &:focus{
                     padding-left: 26px;
