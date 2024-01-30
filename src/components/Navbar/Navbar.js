@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import movieLogo from '../../assets/image/netflix_logo.png';
 import { IoIosSearch } from "react-icons/io";
+import { useEffect, useState } from 'react';
+import { useScrollY } from '../hooks';
 
 function Navbar(props) {
+    const [scrollY] = useScrollY();
     return(
-        <Navigation>
+        <Navigation style={scrollY < 50 ? {background : 'transparent'} :{background : 'var(--color-background)' }}>
             <div className='navContainer'>
                 <div className='logo'>
                     <img src={movieLogo} alt=''/>
@@ -33,7 +36,7 @@ const Navigation = styled.div`
         height: 100px;
     }
     .navContainer{
-        background-color: var(--color-background);
+        background-color: transparent;
         display: flex;
         align-items: center;
         flex-direction: row;
