@@ -46,15 +46,12 @@ const IntroContainer = styled.div`
     position: relative;
     color: var(--color-white);
     padding-top: 56%;
-    border: 1px solid blue;
 
     .videoIntro{
         position: absolute;
         top: 0;
         left: 0;
         z-index: 0.5;
-        
-       
     }
     .infoIntro{
         position: absolute;

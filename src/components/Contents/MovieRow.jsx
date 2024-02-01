@@ -2,26 +2,17 @@ import styled from "styled-components";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import { SmoothHorizontalScrolling } from "../../utils";
-const movies = [
-    "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/d1b54657285421.59cfc94f9e6b5.jpg",
-    "https://img.freepik.com/free-vector/professional-suspense-movie-poster_742173-3470.jpg",
-    "https://img.freepik.com/premium-photo/movie-poster-design_841014-8784.jpg",
-    "https://www.washingtonpost.com/graphics/2019/entertainment/oscar-nominees-movie-poster-design/img/black-panther-web.jpg",
-    "https://i.pinimg.com/736x/b8/9b/a6/b89ba63ee5dc4fefdfcc4157767af9e4.jpg",
-    "https://i.pinimg.com/474x/c8/a0/25/c8a025c1dd50816e75f84f6cc665c611.jpg",
-    "https://i.pinimg.com/736x/48/61/3e/48613e3dfe4b8d590dbf5c04acbe2bd9.jpg",
-    "https://i.pinimg.com/originals/37/18/94/371894fd517162a44e0983d38bf484de.jpg",
-    "https://i.pinimg.com/736x/95/23/10/9523102b8b2e10c940c71e59fa1d4f50.jpg",
-    "https://i.pinimg.com/originals/a9/18/b3/a918b3c45b6aec67bcfaa4fc9ca65637.jpg",
-    "https://i.pinimg.com/originals/a9/18/b3/a918b3c45b6aec67bcfaa4fc9ca65637.jpg",
-];
+import {useViewPort} from "../hooks";
 
-function Contents(props) {
+
+function MovieRow(props) {
+    const {movies, title, isNetflix} = props;
     const sliderRef = useRef();
     const movieRef = useRef();
     const [dragDown, setDragDown] = useState(0);
     const [dragMove, setDragMove] = useState(0);
     const [isDrag, setIsDrag] = useState(false);
+    const [windowWidth] = useViewPort();
 
     const handleScrollRight = () => {
         const maxScrollLeft = sliderRef.current.scrollWidth - sliderRef.current.clientWidth;
@@ -59,34 +50,42 @@ function Contents(props) {
 
     return(
         <MovieRowContainer draggable="false">
-            <h1 className="heading">Netflix Original</h1>
+            <h1 className="heading">{title}</h1>
             <MoviesSlider 
             ref={sliderRef} 
             draggable="true"
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
-            onDragEnter={onDragEnter}>
+            onDragEnter={onDragEnter}
+            style={
+                movies && movies.length > 0 ? 
                 {
-                    movies.map((movie, index) => (
-                        <div key={index} className="movieItem" ref={movieRef} draggable="false">
-                            <img src={movie} alt="" draggable="false"/>
-                            <div className="movieName">Movie name</div>
-                        </div>
-                    ))
-                }
+                    gridTemplateColumns: `repeat(${movies.length},
+                        ${windowWidth > 1200 ? '360px'
+                        : windowWidth > 992 ? '300px'
+                        : windowWidth > 768 ? '250px' : '200px'})`
+                } : {}
+            }
+        >
+            { movies && movies.length > 0 && movies.map((movie, index) => (
+                <div key={index} className="movieItem" ref={movieRef} draggable="false">
+                    <img src={movie} draggable="false" />
+                    <div className="movieName">Movie name</div>
+                </div>
+            ))}
             </MoviesSlider>
             <div>
-                <div className="btnLeft" onClick={handleScrollLeft}>
+                <div onClick={handleScrollLeft} className={`btnLeft ${isNetflix && 'isNetflix'}`}>
                     <FaChevronLeft/>
                 </div>
-                <div className="btnRight" onClick={handleScrollRight}>
+                <div className={`btnRight ${isNetflix && 'isNetflix'}`} onClick={handleScrollRight}>
                     <FaChevronRight/>
                 </div>
             </div>
         </MovieRowContainer>
     )
 }
-export default Contents;
+export default MovieRow;
 
 const MovieRowContainer = styled.div`
     background-color: var(--color-background);
@@ -105,8 +104,8 @@ const MovieRowContainer = styled.div`
         top: 50%;
         left: 30px;
         z-index: 20;
-        width: 50px;
-        height: 100px;
+        width: 40px;
+        height: 50px;
         cursor: pointer;
         transform-origin: center;
         background-color: rgba(0,0,0,0.5);
@@ -122,21 +121,23 @@ const MovieRowContainer = styled.div`
             opacity: 1;
             transform: scale(1.1);
         }
-
         svg{
             opacity: 0.7;
-            font-size: 50px;
+            font-size: 40px;
             transition: all 0.3 linear;
         }
-
+        &.isNetflix{
+            height: 100px;
+            width: max-content;
+        }
     }
     .btnRight{
         position: absolute;
         top: 50%;
         right: 30px;
         z-index: 20;
-        width: 50px;
-        height: 100px;
+        width: 40px;
+        height: 50px;
         cursor: pointer;
         transform-origin: center;
         background-color: rgba(0,0,0,0.5);
@@ -155,8 +156,12 @@ const MovieRowContainer = styled.div`
 
         svg{
             opacity: 0.7;
-            font-size: 50px;
+            font-size: 40px;
             transition: all 0.3 linear;
+        }
+        &.isNetflix{
+            height: 100px;
+            width: max-content;
         }
 
     }
@@ -165,7 +170,6 @@ const MovieRowContainer = styled.div`
 const MoviesSlider = styled.div`
     display: grid;
     gap: 6px;
-    grid-template-columns: repeat(${movies.length}, 300px);
     transition: all 0.3 linear;
     user-select: none;
     overflow-y: hidden;

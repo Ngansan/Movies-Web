@@ -1,4 +1,3 @@
-
 export function SmoothHorizontalScrolling(e, time, amount, start) {
     var eAmt = amount / 100;
     var curTime = 0;
@@ -14,4 +13,12 @@ export function SmoothHorizontalScrolling(e, time, amount, start) {
 
 function SHS_B(e, SC, eAmt, start, Y) {
     e.scrollLeft = eAmt * SC * start;
+}
+
+export function randomRgbaColor(opacity){
+    const r = Math.round(Math.random()*256);
+    const g = Math.round(Math.random()*256);
+    const b = Math.round(Math.random()*256);
+    let color = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    return color;
 }

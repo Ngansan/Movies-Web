@@ -5,7 +5,7 @@ export function useScrollY(){
 
     const handleScrollY = () => {
         const scrollY = window.scrollY || document.documentElement.scrollTop;
-        setScrollY(scrollY)
+        setScrollY(scrollY);
     }
     useEffect(() => {
         handleScrollY();
